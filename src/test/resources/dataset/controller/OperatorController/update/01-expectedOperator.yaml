@@ -1,0 +1,12 @@
+operator:
+  - id: "9affaac9-fcaf-41f6-a76c-2670234b036e"
+    user_id: "6aa45e75-7843-8921-b3fc-3a074a77bbb7"
+    specialization: "Техническая поддержка"
+    max_tickets: 15
+    created_at: "2025-06-02 17:00:00"
+
+
+users:
+  - id: "6aa45e75-7843-8921-b3fc-3a074a77bbb7"
+    name: "Иван Иванов"
+    email: "ivanod@mail.ru"
