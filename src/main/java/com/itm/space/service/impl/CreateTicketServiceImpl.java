@@ -5,15 +5,14 @@ import com.itm.space.domain.entity.TicketStatus;
 import com.itm.space.domain.entity.User;
 import com.itm.space.model.request.CreateTicketRequest;
 import com.itm.space.model.response.CreateTicketResponse;
-import com.itm.space.repository.TicketCategoryRepository;
-import com.itm.space.repository.TicketPriorityRepository;
-import com.itm.space.repository.TicketRepository;
+import com.itm.space.repository.*;
 import com.itm.space.service.CreateTicketService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static com.itm.space.constant.ErrorMessagesConstant.CATEGORY_NOT_FOUND_MESSAGE;
 import static com.itm.space.constant.ErrorMessagesConstant.PRIORITY_NOT_FOUND_EXCEPTION;
@@ -24,6 +23,8 @@ public class CreateTicketServiceImpl implements CreateTicketService {
 
     private final TicketCategoryRepository ticketCategoryRepository;
     private final TicketPriorityRepository ticketPriorityRepository;
+    private final TicketStatusRepository ticketStatusRepository;
+    private final UserRepository userRepository;
     private final TicketRepository ticketRepository;
 
     @Override
@@ -45,13 +46,14 @@ public class CreateTicketServiceImpl implements CreateTicketService {
     private Ticket ticketInit(CreateTicketRequest request) {
 
         Ticket ticket = new Ticket();
-        ticket.setUser(new User());
+        ticket.setId(UUID.randomUUID());
+        ticket.setUser(userRepository.findById(UUID.fromString("123e4567-e89b-12d3-a456-426614174000")).orElseThrow(() -> new EntityNotFoundException(PRIORITY_NOT_FOUND_EXCEPTION)));
         ticket.setCategory(ticketCategoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new EntityNotFoundException(CATEGORY_NOT_FOUND_MESSAGE)));
         ticket.setPriority(ticketPriorityRepository.findById(request.getPriorityId()).orElseThrow(() -> new EntityNotFoundException(PRIORITY_NOT_FOUND_EXCEPTION)));
         ticket.setTitle(request.getTitle());
         ticket.setDescription(request.getDescription());
         ticket.setCreatedAt(LocalDateTime.now());
-        ticket.setStatus(new TicketStatus());
+        ticket.setStatus(ticketStatusRepository.findById(1).orElseThrow(() -> new EntityNotFoundException(PRIORITY_NOT_FOUND_EXCEPTION)));
 
        return ticketRepository.save(ticket);
     }
